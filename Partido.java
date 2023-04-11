@@ -13,16 +13,26 @@ public class Partido {
         this.golesEquipo2 = golesEquipo2;
     }
 
-    public ResultadoEnum resultado(Equipo equipo1, Equipo equipo2){
+    public ResultadoEnum resultado(Equipo equipo){
 
+        int golesEquipoContra;
+        int golesEquipo;
         ResultadoEnum resultadoPartido;
-
-        if (golesEquipo1>golesEquipo2){
-            resultadoPartido = new ResultadoEnum("Gana" + equipo1.nombre);
-        } else if (golesEquipo2>golesEquipo1) {
-            resultadoPartido = new ResultadoEnum("Gana" + equipo2.nombre);
+        if (equipo != this.equipo1){
+            golesEquipo=this.golesEquipo2;
+            golesEquipoContra=this.golesEquipo1;
         }else {
-            resultadoPartido = new ResultadoEnum("Empate");
+            golesEquipo=this.golesEquipo1;
+            golesEquipoContra=this.golesEquipo2;
+        }
+
+
+        if (golesEquipo>golesEquipoContra){
+            resultadoPartido = ResultadoEnum.GANADOR;
+        } else if (golesEquipoContra>golesEquipo) {
+            resultadoPartido = ResultadoEnum.PERDEDOR;
+        }else {
+            resultadoPartido = ResultadoEnum.EMPATE;
         }
 
         return resultadoPartido;
