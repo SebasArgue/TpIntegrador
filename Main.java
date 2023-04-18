@@ -7,29 +7,115 @@ public class Main {
 
     public static void main(String[] args) {
         List<String[]> resultados = leerResultados();
-        List<String[]> pronosticos = leerPronosticos();
+        // Posicion 0: Fase
+        // Posicion 1: Ronda
+        // Posicion 2: Nombre equipo 1
+        // Posicion 3: Nombre equipo 2
+        // Posicion 4: Goles equipo 1
+        // Posicion 5: Goles equipo 2
+        List<Ronda> rondas = new ArrayList<>();
+        Ronda rondaActual = null;
+        List<Partido> partidosActual = null;
+        for (String[] resultado: resultados) {
+            String fase = resultado[0];
+            String ronda = resultado[1];
+            String equipo1 = resultado[2];
+            String equipo2 = resultado[3];
+            int golesEquipo1 = Integer.parseInt(resultado[4]);
+            int golesEquipo2 = Integer.parseInt(resultado[5]);
+            if (rondaActual == null || !rondaActual.nro.equals(ronda)) {
+                // Si la ronda actual es nula o su nombre no coincide con la ronda de la fila actual, crear una nueva ronda
+                rondaActual = new Ronda(ronda);
+                rondas.add(rondaActual);
+                partidosActual = new ArrayList<>();
+                rondaActual.setPartidos(partidosActual);
+            }
 
-        System.out.println("Fase\tRonda\tNombre equipo 1\tNombre equipo 2\tGoles equipo 1\tGoles equipo 2");
-        for (String[] esteResultado : resultados) {
-            System.out.println(esteResultado[0] + "\t" + esteResultado[1] + "\t" + esteResultado[2] + "\t" + esteResultado[3] + "\t" + esteResultado[4] + "\t" + esteResultado[5]);
+            // Crear los equipos y el partido correspondiente
+            Equipo equipoObj1 = new Equipo(equipo1);
+            Equipo equipoObj2 = new Equipo(equipo2);
+            Partido partido = new Partido(equipoObj1, equipoObj2, golesEquipo1, golesEquipo2);
+            partido.resultado(equipoObj1,equipoObj2);
+            partidosActual.add(partido);
         }
+        /*for (Ronda ronda:rondas){
+            System.out.println(ronda.toString());
+        }*/
 
-        System.out.println("\n\nNombre persona\tFase\tRonda\tNombre equipo 1\tNombre equipo 2\tGanador");
+
+        List<String[]> pronosticos = leerPronosticos();
+        // Posicion 0: Nombre de la persona
+        // Posicion 1: Fase
+        // Posicion 2: Ronda
+        // Posicion 3: Nombre equipo 1
+        // Posicion 4: Nombre equipo 2
+        // Posicion 5: Ganador
+        List<Ronda> rondasP = new ArrayList<>();
+        List<Pronostico> pronos = new ArrayList<>();
+        Ronda rondaActualP = null;
+        Pronostico pronActual = null;
+        int contador=0;
+        ResultadoEnum gana;
+
+        List<Partido> partidosActualP = null;
+        for (String[] pronostico: pronosticos) {
+            String nombre = pronostico[0];
+            String fase = pronostico[1];
+            String ronda = pronostico[2];
+            String equipo1 = pronostico[3];
+            String equipo2 = pronostico[4];
+            String ganador = pronostico[5];
+
+            if (pronActual == null || !pronActual.nombre.equals(nombre)){
+
+                pronActual=new Pronostico(nombre);
+                pronos.add(pronActual);
+                pronActual.setRondas(rondasP);
+
+            }
+            if (rondaActualP == null || !rondaActualP.nro.equals(ronda)) {
+                // Si la ronda actual es nula o su nombre no coincide con la ronda de la fila actual, crear una nueva ronda
+                rondaActualP = new Ronda(ronda);
+                rondasP.add(rondaActualP);
+                partidosActualP = new ArrayList<>();
+                rondaActualP.setPartidos(partidosActualP);
+            }
+
+            // Crear los equipos y el partido correspondiente
+            Equipo equipoObj1 = new Equipo(equipo1);
+            Equipo equipoObj2 = new Equipo(equipo2);
+
+
+            if (ganador.equals("1")){contador++;
+                gana= ResultadoEnum.GANA_1;
+            } else if (ganador.equals("2")) {
+                gana= ResultadoEnum.GANA_2;
+            }else {
+                gana= ResultadoEnum.EMPATE;
+            }
+
+            Partido partido = new Partido(equipoObj1, equipoObj2,gana);
+            partidosActualP.add(partido);
+
+
+        }
+        for (Pronostico pronost: pronos){
+            System.out.println(/*pronost.toString()*/contador);
+        }
+        /*System.out.println("\n\nNombre persona\tFase\tRonda\tNombre equipo 1\tNombre equipo 2\tGanador");
         for (String[] estepronosticos : pronosticos) {
             System.out.println(estepronosticos[0] + "\t" + estepronosticos[1] + "\t" + estepronosticos[2] + "\t" + estepronosticos[3] + "\t" + estepronosticos[4] + "\t" + estepronosticos[5]);
-        }
+        }*/
+
+
+
+
 
     }
 
 
 
-    // Va a devolver una Lista con un arreglo de String que va a contener:
-    // Posicion 0: Ronda
-    // Posicion 1: Fase
-    // Posicion 2: Nombre equipo 1
-    // Posicion 3: Nombre equipo 2
-    // Posicion 4: Goles equipo 1
-    // Posicion 5: Goles equipo 2
+
     public static List<String[]> leerResultados() {
         List<String[]> resultados = new ArrayList<>();
 
@@ -110,73 +196,5 @@ public class Main {
 
         return pronosticos;
     }
-   /* public static String rutaResulatos = "Resultados.csv";
-    public static String rutaPronosticos = "Pronosticos.csv";
 
-    public static void main(String[] args) {
-        Ronda ronda1=new Ronda("1");
-
-        //leo el archivo de Resultado y creo las clases
-        try {
-            for (String linea: Files.readAllLines(Paths.get(rutaResulatos))){
-                List<String> lineasSep = List.of(linea.split(";"));
-                Equipo equipo1=new Equipo(lineasSep.get(2));
-                Equipo equipo2=new Equipo(lineasSep.get(5));
-                Partido partido= new Partido(lineasSep.get(1),equipo1 ,equipo2,Integer.parseInt(lineasSep.get(3)),Integer.parseInt(lineasSep.get(4)));
-                ronda1.partidos.add(partido);
-            }
-
-        }catch (IOException e){
-            System.out.println("Archivo no encontrado");
-        }
-
-        *//*Equipo argentina=new Equipo("Argentina");
-        Equipo arabia = new Equipo("Arabia Saudita");
-        Equipo polonia = new Equipo("Polonia");
-        Equipo mexico = new Equipo("Mexico");
-
-        Partido partido1= new Partido("P1",argentina ,arabia,1,2);
-        Partido partido2= new Partido("P2",polonia,mexico,0,0);
-
-        ronda1.partidos.add(partido1);
-        ronda1.partidos.add(partido2);*//*
-
-        ResultadoEnum resulPart1 = ronda1.partidos.get(0).resultado(ronda1.partidos.get(0).equipo1);
-        ResultadoEnum resulPart2 = ronda1.partidos.get(1).resultado(ronda1.partidos.get(1).equipo1);
-
-        //leo el archivo de Pronostico y creo las clases
-        List<Pronostico> pronosticos =new ArrayList<>();
-
-        try {
-            for (String linea: Files.readAllLines(Paths.get(rutaPronosticos))){
-                List<String> lineasSep = List.of(linea.split(";"));
-                Equipo equipo1=new Equipo(lineasSep.get(2));
-                if(lineasSep.get(3) == "Ganador"){
-                    pronosticos.add(new Pronostico(ronda1.partidos.get(1),equipo1,ResultadoEnum.GANADOR));
-                } else if (lineasSep.get(3)=="Perdedor") {
-                    pronosticos.add(new Pronostico(ronda1.partidos.get(1),equipo1,ResultadoEnum.PERDEDOR));
-
-                }else pronosticos.add(new Pronostico(ronda1.partidos.get(1),equipo1,ResultadoEnum.EMPATE));
-
-
-            }
-
-        }catch (IOException e){
-            System.out.println("Archivo no encontrado");
-        }
-
-
-
-        //Calculo y muestro los puntos.
-
-        System.out.println("Puntaje= " + (puntos(pronosticos.get(0), resulPart1)+puntos(pronosticos.get(1), resulPart2)) );
-
-
-    }
-    public static  int puntos(Pronostico pron, ResultadoEnum res){
-        if (res.toString() == pron.resultado.toString()){
-            return 1;
-        } else return 0;
-
-    }*/
 }

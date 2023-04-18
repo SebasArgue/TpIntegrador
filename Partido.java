@@ -1,40 +1,47 @@
 public class Partido {
-    public String partidoId;
+
     Equipo equipo1;
     Equipo equipo2;
     int golesEquipo1;
     int golesEquipo2;
 
-    public Partido(String partidoId, Equipo equipo1, Equipo equipo2, int golesEquipo1, int golesEquipo2) {
-        this.partidoId = partidoId;
+    ResultadoEnum resultadoPartido;
+
+    public Partido( Equipo equipo1, Equipo equipo2, int golesEquipo1, int golesEquipo2) {
+
         this.equipo1 = equipo1;
         this.equipo2 = equipo2;
         this.golesEquipo1 = golesEquipo1;
         this.golesEquipo2 = golesEquipo2;
     }
 
-    public ResultadoEnum resultado(Equipo equipo){
+    public Partido(Equipo equipo1, Equipo equipo2, ResultadoEnum resultadoPartido) {
+        this.equipo1 = equipo1;
+        this.equipo2 = equipo2;
+        this.resultadoPartido = resultadoPartido;
+    }
 
-        int golesEquipoContra;
-        int golesEquipo;
-        ResultadoEnum resultadoPartido;
-        if (equipo != this.equipo1){
-            golesEquipo=this.golesEquipo2;
-            golesEquipoContra=this.golesEquipo1;
-        }else {
-            golesEquipo=this.golesEquipo1;
-            golesEquipoContra=this.golesEquipo2;
-        }
+    public Void resultado(Equipo equipo1, Equipo equipo2){
 
-
-        if (golesEquipo>golesEquipoContra){
-            resultadoPartido = ResultadoEnum.GANADOR;
-        } else if (golesEquipoContra>golesEquipo) {
-            resultadoPartido = ResultadoEnum.PERDEDOR;
+       ResultadoEnum resultadoPartido;
+        if (golesEquipo1>golesEquipo2){
+            resultadoPartido = ResultadoEnum.GANA_1;
+        } else if (golesEquipo2>golesEquipo1) {
+            resultadoPartido = ResultadoEnum.GANA_2;
         }else {
             resultadoPartido = ResultadoEnum.EMPATE;
         }
-
-        return resultadoPartido;
+        this.resultadoPartido = resultadoPartido;
+        return null;
     }
+
+    @Override
+    public String toString() {
+        return "Partido{" +
+                "equipo1=" + equipo1.toString() +
+                ", equipo2=" + equipo2.toString() +
+                ", resultadoPartido=" + resultadoPartido +
+                '}';
+    }
+
 }

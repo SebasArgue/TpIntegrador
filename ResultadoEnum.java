@@ -1,3 +1,3 @@
 public enum ResultadoEnum {
-    GANADOR,PERDEDOR,EMPATE;
+    GANA_1,GANA_2,EMPATE;
 }

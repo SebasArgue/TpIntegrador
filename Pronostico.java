@@ -1,13 +1,25 @@
-public class Pronostico {
-    Partido partido;
-    Equipo equipo;
-    ResultadoEnum resultado;
+import java.util.ArrayList;
+import java.util.List;
 
-    public Pronostico(Partido partido, Equipo equipo, ResultadoEnum resultado) {
-        this.partido = partido;
-        this.equipo = equipo;
-        this.resultado = resultado;
+public class Pronostico {
+    String nombre;
+    List<Ronda> rondas;
+
+
+    public Pronostico(String nombre) {
+        this.nombre = nombre;
+
     }
 
+    public void setRondas(List<Ronda> rondas) {
+        this.rondas = rondas;
+    }
 
+    @Override
+    public String toString() {
+        return "Pronostico{" +
+                "nombre='" + nombre + '\'' +
+                ", rondas=" + rondas.toString() +
+                '}';
+    }
 }
