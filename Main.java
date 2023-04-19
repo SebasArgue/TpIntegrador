@@ -38,9 +38,11 @@ public class Main {
             partido.resultado(equipoObj1,equipoObj2);
             partidosActual.add(partido);
         }
-        /*for (Ronda ronda:rondas){
+        System.out.println("**********RESULTADOS DE LOS PARTIDOS********");
+        for (Ronda ronda:rondas){
+
             System.out.println(ronda.toString());
-        }*/
+        }
 
 
         List<String[]> pronosticos = leerPronosticos();
@@ -50,15 +52,18 @@ public class Main {
         // Posicion 3: Nombre equipo 1
         // Posicion 4: Nombre equipo 2
         // Posicion 5: Ganador
-        List<Ronda> rondasP = new ArrayList<>();
+
+
+
+
+        List<Ronda> rondasP = null;
         List<Pronostico> pronos = new ArrayList<>();
         Ronda rondaActualP = null;
         Pronostico pronActual = null;
-        int contador=0;
-        ResultadoEnum gana;
-
         List<Partido> partidosActualP = null;
-        for (String[] pronostico: pronosticos) {
+
+        for (int i = 0; i < pronosticos.size(); i++) {
+            String[] pronostico = pronosticos.get(i);
             String nombre = pronostico[0];
             String fase = pronostico[1];
             String ronda = pronostico[2];
@@ -66,50 +71,34 @@ public class Main {
             String equipo2 = pronostico[4];
             String ganador = pronostico[5];
 
-            if (pronActual == null || !pronActual.nombre.equals(nombre)){
-
-                pronActual=new Pronostico(nombre);
+            if (pronActual == null || !pronActual.nombre.equals(nombre)) {
+                pronActual = new Pronostico(nombre);
+                rondasP = new ArrayList<>();
                 pronos.add(pronActual);
                 pronActual.setRondas(rondasP);
 
+
             }
             if (rondaActualP == null || !rondaActualP.nro.equals(ronda)) {
-                // Si la ronda actual es nula o su nombre no coincide con la ronda de la fila actual, crear una nueva ronda
                 rondaActualP = new Ronda(ronda);
                 rondasP.add(rondaActualP);
                 partidosActualP = new ArrayList<>();
                 rondaActualP.setPartidos(partidosActualP);
             }
 
-            // Crear los equipos y el partido correspondiente
-            Equipo equipoObj1 = new Equipo(equipo1);
-            Equipo equipoObj2 = new Equipo(equipo2);
 
 
-            if (ganador.equals("1")){contador++;
-                gana= ResultadoEnum.GANA_1;
-            } else if (ganador.equals("2")) {
-                gana= ResultadoEnum.GANA_2;
-            }else {
-                gana= ResultadoEnum.EMPATE;
-            }
-
-            Partido partido = new Partido(equipoObj1, equipoObj2,gana);
-            partidosActualP.add(partido);
-
+                Equipo equipoObj1 = new Equipo(equipo1);
+                Equipo equipoObj2 = new Equipo(equipo2);
+                Partido partido = new Partido(equipoObj1, equipoObj2, ganador);
+                partidosActualP.add(partido);
 
         }
+        System.out.println("************PRONOSTICOS***************");
         for (Pronostico pronost: pronos){
-            System.out.println(/*pronost.toString()*/contador);
+
+            System.out.println(pronost.toString());
         }
-        /*System.out.println("\n\nNombre persona\tFase\tRonda\tNombre equipo 1\tNombre equipo 2\tGanador");
-        for (String[] estepronosticos : pronosticos) {
-            System.out.println(estepronosticos[0] + "\t" + estepronosticos[1] + "\t" + estepronosticos[2] + "\t" + estepronosticos[3] + "\t" + estepronosticos[4] + "\t" + estepronosticos[5]);
-        }*/
-
-
-
-
 
     }
 

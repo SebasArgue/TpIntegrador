@@ -10,6 +10,11 @@ public class Ronda {
         this.partidos=new ArrayList<>();
     }
 
+    public Ronda(String nro, List<Partido> partidos) {
+        this.nro = nro;
+        this.partidos = partidos;
+    }
+
     public void setPartidos(List<Partido> partidos) {
         this.partidos = partidos;
     }
@@ -20,5 +25,9 @@ public class Ronda {
                 "nro='" + nro + '\'' +
                 ", partidos=" + partidos.toString() +
                 '}';
+    }
+
+    public void agregarPartidos(Partido partido) {
+        this.partidos.add(partido);
     }
 }

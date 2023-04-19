@@ -11,6 +11,11 @@ public class Pronostico {
 
     }
 
+    public Pronostico(String nombre, List<Ronda> rondas) {
+        this.nombre = nombre;
+        this.rondas = rondas;
+    }
+
     public void setRondas(List<Ronda> rondas) {
         this.rondas = rondas;
     }
@@ -21,5 +26,9 @@ public class Pronostico {
                 "nombre='" + nombre + '\'' +
                 ", rondas=" + rondas.toString() +
                 '}';
+    }
+
+    public void agregarRonda(Ronda ronda) {
+        this.rondas.add(ronda);
     }
 }

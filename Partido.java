@@ -4,6 +4,7 @@ public class Partido {
     Equipo equipo2;
     int golesEquipo1;
     int golesEquipo2;
+    String j;
 
     ResultadoEnum resultadoPartido;
 
@@ -15,10 +16,19 @@ public class Partido {
         this.golesEquipo2 = golesEquipo2;
     }
 
-    public Partido(Equipo equipo1, Equipo equipo2, ResultadoEnum resultadoPartido) {
+    public Partido(Equipo equipo1, Equipo equipo2,String resultado) {
         this.equipo1 = equipo1;
         this.equipo2 = equipo2;
-        this.resultadoPartido = resultadoPartido;
+        this.j=resultado;
+
+        if (resultado.equals("1")){
+          this.resultadoPartido= ResultadoEnum.GANA_1;
+        } else if (resultado.equals("2")) {
+            this.resultadoPartido=ResultadoEnum.GANA_2;
+        }else {
+            this.resultadoPartido=ResultadoEnum.EMPATE;
+        }
+
     }
 
     public Void resultado(Equipo equipo1, Equipo equipo2){
