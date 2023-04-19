@@ -3,10 +3,12 @@ import java.util.List;
 
 public class Ronda {
     String nro;
+    String fase;
     List<Partido> partidos;
 
-    public Ronda(String nro) {
+    public Ronda(String nro,String fase) {
         this.nro = nro;
+        this.fase=fase;
         this.partidos=new ArrayList<>();
     }
 
@@ -21,7 +23,7 @@ public class Ronda {
 
     @Override
     public String toString() {
-        return "Ronda{" +
+        return "Ronda{" + "fase='"+fase+'\''+
                 "nro='" + nro + '\'' +
                 ", partidos=" + partidos.toString() +
                 '}';

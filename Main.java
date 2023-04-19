@@ -25,7 +25,7 @@ public class Main {
             int golesEquipo2 = Integer.parseInt(resultado[5]);
             if (rondaActual == null || !rondaActual.nro.equals(ronda)) {
                 // Si la ronda actual es nula o su nombre no coincide con la ronda de la fila actual, crear una nueva ronda
-                rondaActual = new Ronda(ronda);
+                rondaActual = new Ronda(ronda,fase);
                 rondas.add(rondaActual);
                 partidosActual = new ArrayList<>();
                 rondaActual.setPartidos(partidosActual);
@@ -38,11 +38,11 @@ public class Main {
             partido.resultado(equipoObj1,equipoObj2);
             partidosActual.add(partido);
         }
-        System.out.println("**********RESULTADOS DE LOS PARTIDOS********");
+        /*System.out.println("**********RESULTADOS DE LOS PARTIDOS********");
         for (Ronda ronda:rondas){
 
             System.out.println(ronda.toString());
-        }
+        }*/
 
 
         List<String[]> pronosticos = leerPronosticos();
@@ -80,7 +80,7 @@ public class Main {
 
             }
             if (rondaActualP == null || !rondaActualP.nro.equals(ronda)) {
-                rondaActualP = new Ronda(ronda);
+                rondaActualP = new Ronda(ronda,fase);
                 rondasP.add(rondaActualP);
                 partidosActualP = new ArrayList<>();
                 rondaActualP.setPartidos(partidosActualP);
@@ -96,8 +96,30 @@ public class Main {
         }
         System.out.println("************PRONOSTICOS***************");
         for (Pronostico pronost: pronos){
+            int c=0;
+            for (Ronda rondaP:pronost.rondas) {
 
-            System.out.println(pronost.toString());
+                for (Ronda rondaR: rondas) {
+                    if (rondaP.nro.equals(rondaR.nro)){
+                        for (int i = 0; i < rondaP.partidos.size(); i++) {
+                            if (rondaP.partidos.get(i).equipo1.nombre.equals(rondaR.partidos.get(i).equipo1.nombre) &&rondaP.partidos.get(i).equipo2.nombre.equals(rondaR.partidos.get(i).equipo2.nombre) ){
+                                if (rondaP.partidos.get(i).resultadoPartido.equals(rondaR.partidos.get(i).resultadoPartido)){
+                                    c++;
+                                }
+
+                            }
+                        }System.out.println(c);
+                        break;
+
+                    }
+                }
+
+
+
+
+            }
+
+
         }
 
     }
