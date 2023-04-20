@@ -2,18 +2,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Ronda {
-    String nro;
+    String nombre;
     String fase;
     List<Partido> partidos;
 
-    public Ronda(String nro,String fase) {
-        this.nro = nro;
+    public Ronda(String nombre,String fase) {
+        this.nombre = nombre;
         this.fase=fase;
         this.partidos=new ArrayList<>();
     }
 
-    public Ronda(String nro, List<Partido> partidos) {
-        this.nro = nro;
+    public Ronda(String nombre, List<Partido> partidos) {
+        this.nombre = nombre;
         this.partidos = partidos;
     }
 
@@ -24,7 +24,7 @@ public class Ronda {
     @Override
     public String toString() {
         return "Ronda{" + "fase='"+fase+'\''+
-                "nro='" + nro + '\'' +
+                "nro='" + nombre + '\'' +
                 ", partidos=" + partidos.toString() +
                 '}';
     }

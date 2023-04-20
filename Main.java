@@ -1,3 +1,6 @@
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.sql.*;
@@ -6,13 +9,19 @@ import java.sql.*;
 public class Main {
 
     public static void main(String[] args) {
+        int punto=1;//se otorga un punto como default
+        int puntoE=1;
+        //Leo el archivo de configuracion de puntos
+        List<String[]> puntos=leerConfiguracion();
+        for (String[] p: puntos) {
+            if (p[0].equals("punto acierto")){
+                punto=Integer.parseInt(p[1]);
+            } else if (p[0].equals("punto extra")) {
+                puntoE=Integer.parseInt(p[1]);
+            }
+        }
+        //Obtengo e Instancio todas las instancias de Rondas de los Resultados
         List<String[]> resultados = leerResultados();
-        // Posicion 0: Fase
-        // Posicion 1: Ronda
-        // Posicion 2: Nombre equipo 1
-        // Posicion 3: Nombre equipo 2
-        // Posicion 4: Goles equipo 1
-        // Posicion 5: Goles equipo 2
         List<Ronda> rondas = new ArrayList<>();
         Ronda rondaActual = null;
         List<Partido> partidosActual = null;
@@ -23,7 +32,7 @@ public class Main {
             String equipo2 = resultado[3];
             int golesEquipo1 = Integer.parseInt(resultado[4]);
             int golesEquipo2 = Integer.parseInt(resultado[5]);
-            if (rondaActual == null || !rondaActual.nro.equals(ronda)) {
+            if (rondaActual == null || !rondaActual.nombre.equals(ronda)) {
                 // Si la ronda actual es nula o su nombre no coincide con la ronda de la fila actual, crear una nueva ronda
                 rondaActual = new Ronda(ronda,fase);
                 rondas.add(rondaActual);
@@ -38,24 +47,9 @@ public class Main {
             partido.resultado(equipoObj1,equipoObj2);
             partidosActual.add(partido);
         }
-        /*System.out.println("**********RESULTADOS DE LOS PARTIDOS********");
-        for (Ronda ronda:rondas){
 
-            System.out.println(ronda.toString());
-        }*/
-
-
+        //Obtengo e Instancio todos los pronosticos de los participantes.
         List<String[]> pronosticos = leerPronosticos();
-        // Posicion 0: Nombre de la persona
-        // Posicion 1: Fase
-        // Posicion 2: Ronda
-        // Posicion 3: Nombre equipo 1
-        // Posicion 4: Nombre equipo 2
-        // Posicion 5: Ganador
-
-
-
-
         List<Ronda> rondasP = null;
         List<Pronostico> pronos = new ArrayList<>();
         Ronda rondaActualP = null;
@@ -79,7 +73,7 @@ public class Main {
 
 
             }
-            if (rondaActualP == null || !rondaActualP.nro.equals(ronda)) {
+            if (rondaActualP == null || !rondaActualP.nombre.equals(ronda)) {
                 rondaActualP = new Ronda(ronda,fase);
                 rondasP.add(rondaActualP);
                 partidosActualP = new ArrayList<>();
@@ -94,33 +88,32 @@ public class Main {
                 partidosActualP.add(partido);
 
         }
-        System.out.println("************PRONOSTICOS***************");
+
+
         for (Pronostico pronost: pronos){
             int c=0;
-            for (Ronda rondaP:pronost.rondas) {
 
+            for (Ronda rondaP:pronost.rondas) {
                 for (Ronda rondaR: rondas) {
-                    if (rondaP.nro.equals(rondaR.nro)){
+                    if (rondaP.nombre.equals(rondaR.nombre)){
                         for (int i = 0; i < rondaP.partidos.size(); i++) {
                             if (rondaP.partidos.get(i).equipo1.nombre.equals(rondaR.partidos.get(i).equipo1.nombre) &&rondaP.partidos.get(i).equipo2.nombre.equals(rondaR.partidos.get(i).equipo2.nombre) ){
                                 if (rondaP.partidos.get(i).resultadoPartido.equals(rondaR.partidos.get(i).resultadoPartido)){
-                                    c++;
+                                    pronost.setPuntos(punto);
+                                    pronost.aciertosExtra(rondaR.nombre);
+                                    pronost.aciertosExtra(rondaR.fase);
                                 }
-
                             }
-                        }System.out.println(c);
+                        }
+                        pronost.puntosExtra(puntoE);
                         break;
-
                     }
                 }
-
-
-
-
             }
-
-
+            System.out.println(pronost.nombre+" obtuvo: "+pronost.puntos+" puntos.");
         }
+
+
 
     }
 
@@ -207,5 +200,17 @@ public class Main {
 
         return pronosticos;
     }
-
+    public static List<String[]> leerConfiguracion(){
+        String rutaArchConf="configuracion.csv";
+        List<String[]> puntos=new ArrayList<>();
+        try {
+            for (String linea : Files.readAllLines(Paths.get(rutaArchConf))){
+                String[] lineaSeparada=linea.split(";");
+                puntos.add(lineaSeparada);
+            }
+        }catch (IOException e){
+            System.out.println("problema al acceder al archivo");
+        }
+        return puntos;
+    }
 }
