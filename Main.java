@@ -22,9 +22,9 @@ public class Main {
         }
         //Obtengo e Instancio todas las instancias de Rondas de los Resultados
         List<String[]> resultados = leerResultados();
-        List<Ronda> rondas = new ArrayList<>();
-        Ronda rondaActual = null;
-        List<Partido> partidosActual = null;
+        List<Ronda> rondas = new ArrayList<>(); // inicializo el array de rondas
+        Ronda rondaActual = null; // uso esta variable de bandera para las rondas
+        List<Partido> partidosActual = null; // creo la lista para almacenar los partidos
         for (String[] resultado: resultados) {
             String fase = resultado[0];
             String ronda = resultado[1];
@@ -36,8 +36,8 @@ public class Main {
                 // Si la ronda actual es nula o su nombre no coincide con la ronda de la fila actual, crear una nueva ronda
                 rondaActual = new Ronda(ronda,fase);
                 rondas.add(rondaActual);
-                partidosActual = new ArrayList<>();
-                rondaActual.setPartidos(partidosActual);
+                partidosActual = new ArrayList<>();//inicializo la lista de partidos
+                rondaActual.setPartidos(partidosActual); // Agrego los partidos a la lista
             }
 
             // Crear los equipos y el partido correspondiente
@@ -50,10 +50,10 @@ public class Main {
 
         //Obtengo e Instancio todos los pronosticos de los participantes.
         List<String[]> pronosticos = leerPronosticos();
-        List<Ronda> rondasP = null;
-        List<Pronostico> pronos = new ArrayList<>();
-        Ronda rondaActualP = null;
-        Pronostico pronActual = null;
+        List<Ronda> rondasP = null; // declaro la lista de rondas pertenecientes a pronosticos
+        List<Pronostico> pronos = new ArrayList<>(); // declaro e inicializo la lista de Pronosticos
+        Ronda rondaActualP = null; // uso esta variable como bandera para las rondas
+        Pronostico pronActual = null; // esta variable la uso como bandera para los pronosticos
         List<Partido> partidosActualP = null;
 
         for (int i = 0; i < pronosticos.size(); i++) {
@@ -65,6 +65,7 @@ public class Main {
             String equipo2 = pronostico[4];
             String ganador = pronostico[5];
 
+            //Si no existe el pronostico creo uno nuevo
             if (pronActual == null || !pronActual.nombre.equals(nombre)) {
                 pronActual = new Pronostico(nombre);
                 rondasP = new ArrayList<>();
@@ -110,7 +111,7 @@ public class Main {
                     }
                 }
             }
-            System.out.println(pronost.nombre+" obtuvo: "+pronost.puntos+" puntos.");
+            System.out.println(pronost.nombre+" acertó "+ pronost.pronAcertados +" pronosticos y obtuvo: "+ pronost.puntos+" puntos."+((pronost.puntosExtra)?" Y obtuvo puntos extra": " "));
         }
 
 

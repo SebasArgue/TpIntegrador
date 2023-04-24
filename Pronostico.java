@@ -5,6 +5,8 @@ public class Pronostico {
     String nombre;
     List<Ronda> rondas;
     int puntos=0;
+    int pronAcertados=0;
+    boolean puntosExtra;
 
     int aciertoG=0;
     int aciertoO=0;
@@ -43,6 +45,7 @@ public class Pronostico {
 
     public void setPuntos(int puntos) {
         this.puntos += puntos;
+        this.pronAcertados++;
     }
     public void aciertosExtra(String nombre){
 
@@ -70,6 +73,7 @@ public class Pronostico {
     public void puntosExtra(int puntosE){
         if(aciertoG==6||aciertoO==8||aciertoC==4||aciertoS==2||aciertoF==2||aciertoFaseI==48||aciertoFaseF==16){
             this.puntos+=puntosE;
+            this.puntosExtra= true;
         }
     }
 
