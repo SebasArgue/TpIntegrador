@@ -4,6 +4,7 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.sql.*;
+import java.util.regex.*;
 
 
 public class Main {
@@ -30,8 +31,14 @@ public class Main {
             String ronda = resultado[1];
             String equipo1 = resultado[2];
             String equipo2 = resultado[3];
-            int golesEquipo1 = Integer.parseInt(resultado[4]);
-            int golesEquipo2 = Integer.parseInt(resultado[5]);
+            int golesEquipo1=0;
+            int golesEquipo2=0;
+            if (validarNumero(resultado[4])){
+                golesEquipo1 = Integer.parseInt(resultado[4]);
+            }
+            if (validarNumero(resultado[5])){
+                golesEquipo2 = Integer.parseInt(resultado[5]);
+            }
             if (rondaActual == null || !rondaActual.nombre.equals(ronda)) {
                 // Si la ronda actual es nula o su nombre no coincide con la ronda de la fila actual, crear una nueva ronda
                 rondaActual = new Ronda(ronda,fase);
@@ -56,8 +63,7 @@ public class Main {
         Pronostico pronActual = null; // esta variable la uso como bandera para los pronosticos
         List<Partido> partidosActualP = null;
 
-        for (int i = 0; i < pronosticos.size(); i++) {
-            String[] pronostico = pronosticos.get(i);
+        for (String[] pronostico : pronosticos) {
             String nombre = pronostico[0];
             String fase = pronostico[1];
             String ronda = pronostico[2];
@@ -75,24 +81,23 @@ public class Main {
 
             }
             if (rondaActualP == null || !rondaActualP.nombre.equals(ronda)) {
-                rondaActualP = new Ronda(ronda,fase);
+                rondaActualP = new Ronda(ronda, fase);
                 rondasP.add(rondaActualP);
                 partidosActualP = new ArrayList<>();
                 rondaActualP.setPartidos(partidosActualP);
             }
 
 
-
-                Equipo equipoObj1 = new Equipo(equipo1);
-                Equipo equipoObj2 = new Equipo(equipo2);
-                Partido partido = new Partido(equipoObj1, equipoObj2, ganador);
-                partidosActualP.add(partido);
+            Equipo equipoObj1 = new Equipo(equipo1);
+            Equipo equipoObj2 = new Equipo(equipo2);
+            Partido partido = new Partido(equipoObj1, equipoObj2, ganador);
+            partidosActualP.add(partido);
 
         }
 
 
         for (Pronostico pronost: pronos){
-            int c=0;
+
 
             for (Ronda rondaP:pronost.rondas) {
                 for (Ronda rondaR: rondas) {
@@ -111,7 +116,10 @@ public class Main {
                     }
                 }
             }
-            System.out.println(pronost.nombre+" acertó "+ pronost.pronAcertados +" pronosticos y obtuvo: "+ pronost.puntos+" puntos."+((pronost.puntosExtra)?" Y obtuvo puntos extra": " "));
+            System.out.println("-------------Puntajes por participante---------------");
+            System.out.println(" ");
+            System.out.println(pronost.nombre+" acertó "+ pronost.pronAcertados +" pronosticos y obtuvo: "+ pronost.puntos+" puntos en total."+((pronost.puntosExtra)?" Y obtuvo puntos extra por rondas o fases.": " "));
+            System.out.println(" ");
         }
 
 
@@ -151,6 +159,13 @@ public class Main {
                 resultados.add(fila);
             }
             con.close();
+
+
+
+
+
+
+
         } catch (SQLException e) {
             System.out.println("Error con SQL");
         }
@@ -213,5 +228,16 @@ public class Main {
             System.out.println("problema al acceder al archivo");
         }
         return puntos;
+    }
+    public static boolean validarNumero(String numero) {
+        // Expresión regular para validar números enteros positivos
+        String regex = "^[1-9]\\d*$";
+
+        // Compilar la expresión regular en un objeto Pattern
+        Pattern pattern = Pattern.compile(regex);
+
+        // Validar la entrada utilizando el objeto Matcher
+        Matcher matcher = pattern.matcher(numero);
+        return matcher.matches();
     }
 }

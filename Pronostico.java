@@ -1,4 +1,4 @@
-import java.util.ArrayList;
+
 import java.util.List;
 
 public class Pronostico {
@@ -8,13 +8,8 @@ public class Pronostico {
     int pronAcertados=0;
     boolean puntosExtra;
 
-    int aciertoG=0;
-    int aciertoO=0;
-    int aciertoC=0;
-    int aciertoS=0;
-    int aciertoF=0;
-    int aciertoFaseI=0;
-    int aciertoFaseF=0;
+    int[] aciertosR= new int[]{0,0,0,0,0,0,0};
+
 
 
     public Pronostico(String nombre) {
@@ -22,10 +17,6 @@ public class Pronostico {
 
     }
 
-    public Pronostico(String nombre, List<Ronda> rondas) {
-        this.nombre = nombre;
-        this.rondas = rondas;
-    }
 
     public void setRondas(List<Ronda> rondas) {
         this.rondas = rondas;
@@ -39,9 +30,7 @@ public class Pronostico {
                 '}';
     }
 
-    public void agregarRonda(Ronda ronda) {
-        this.rondas.add(ronda);
-    }
+
 
     public void setPuntos(int puntos) {
         this.puntos += puntos;
@@ -51,27 +40,34 @@ public class Pronostico {
 
         switch (nombre.toLowerCase()){
             case "octavos":
-                this.aciertoO++;
+                //this.aciertoO++;
+                this.aciertosR[1]++;
                 break;
             case "cuartos":
-                this.aciertoC++;
+               // this.aciertoC++;
+                this.aciertosR[2]++;
                 break;
             case "semis":
-                this.aciertoS++;
+               // this.aciertoS++;
+                this.aciertosR[3]++;
                 break;
             case "final":
-                this.aciertoF++;
+               // this.aciertoF++;
+                this.aciertosR[4]++;
                 break;
             case "inicial":
-                this.aciertoFaseI++;
+               // this.aciertoFaseI++;
+                this.aciertosR[5]++;
             case "finalf":
-                this.aciertoFaseF++;
+                //this.aciertoFaseF++;
+                this.aciertosR[6]++;
             default:
-                this.aciertoG++;
+                //this.aciertoG++;
+                this.aciertosR[0]++;
         }
     }
     public void puntosExtra(int puntosE){
-        if(aciertoG==6||aciertoO==8||aciertoC==4||aciertoS==2||aciertoF==2||aciertoFaseI==48||aciertoFaseF==16){
+        if(aciertosR[0]==6||aciertosR[1]==8||aciertosR[2]==4||aciertosR[3]==2||aciertosR[4]==2||aciertosR[5]==48||aciertosR[6]==16){
             this.puntos+=puntosE;
             this.puntosExtra= true;
         }
